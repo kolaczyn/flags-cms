@@ -34,5 +34,15 @@ export class FlagsService {
     return this.http.get<FlagsDto>(`${this.apiUrl}/flags`)
   }
 
+  // flags
+  flagGreetUsers = computed(() => {
+    return this.checkValue('greetUser')
+  })
+  flagAboutSection = computed(() => this.checkValue('aboutSection'))
+
+  checkValue(label: string) {
+    return this.flags()?.find((x) => x.label === label)?.value ?? false
+  }
+
   private flagsLoaded$ = this.getFlags()
 }

@@ -1,3 +1,7 @@
-@if (flagsService.flags(); as flags) {
-  <app-flags-list [flags]="flags" />
+<h2>hello from home</h2>
+@if (flagsService.flagGreetUsers()) {
+  <h2>Hi dear user :)</h2>
+}
+@if (flagsService.flagAboutSection()) {
+  <p>This is a small section about this app</p>
 }

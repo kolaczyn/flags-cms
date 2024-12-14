@@ -8,6 +8,7 @@ Celem projektu jest zbudowanie projektu do zarządzania feature flagami
 - [ ] Globalne włączenie oraz wyłączenie feature flagi
 - [ ] Na początku wykorzystywane tylko w tym samym projekcie
 - [ ] Potem wykorzystywane w innym projekcie
+- [ ] Dobry type checking (nie może być to zwykły string)
 - [ ] Można przełączać pewne flagi tylko dla uprzywilejowanej grupy użytkowników (np. osoby rozwijające projekt, nie użytkownicy)
 - [ ] Można przełączać pewne flagi dla konkretnych użytkowników
 - [ ] Testy A/B — flagi ustawione tylko dla wybranego procenta użytkowników
@@ -34,6 +35,10 @@ Celem projektu jest zbudowanie projektu do zarządzania feature flagami
 - Napisać w końcu .NET z autoryzacją
 - Nauczyć się więcej na temat Nx
 - Ładowanie zmiennych środowiskowych natywnie (build-time)
+
+## Być może w przyszłości
+
+Ogarnąć logi (frontend + backend)
 
 ## Jak uruchomić
 

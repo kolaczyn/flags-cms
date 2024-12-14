@@ -1,11 +1,9 @@
 import { Component, inject } from '@angular/core'
-import { FlagsService } from './data-access/flags.service'
-import { FlagsListComponent } from './ui/flags-list.component'
+import { FlagsService } from '../flags-settings/data-access/flags.service'
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  imports: [FlagsListComponent],
 })
 export default class HomeComponent {
   flagsService = inject(FlagsService)

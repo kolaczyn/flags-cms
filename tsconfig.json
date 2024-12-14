@@ -23,6 +23,9 @@
     "strictTemplates": true,
     "strictStandalone": true,
     "extendedDiagnostics": {
+      "checks": {
+        "unusedStandaloneImports": "warning"
+      },
       "defaultCategory": "error"
     }
   }
