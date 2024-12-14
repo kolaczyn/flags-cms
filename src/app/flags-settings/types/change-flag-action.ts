@@ -1,4 +1,4 @@
-export type FlagChanged = {
+export type ChangeFlagAction = {
   id: string
   newValue: boolean
 }
