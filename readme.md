@@ -22,6 +22,8 @@ Celem projektu jest zbudowanie projektu do zarządzania feature flagami
 - Potem .NET
 - Potem .NET z clean architecture
 - Potem rozwijanie równolegle fullstackowo obu rozwiązań z kolejnymi feature-ami
+- Postarać się zintegrować Nx do projektu
+- Użyć Nx do tworzenia murów wokół modułów (zainspirowane github.com/marcinmilewicz/ddd-frontend-example)
 
 ## Cel projektu pod względem nauczania
 
@@ -30,4 +32,5 @@ Celem projektu jest zbudowanie projektu do zarządzania feature flagami
 - Napisać testy jednostkowe/integracyjne w Angular
 - Przypomnieć sobie .NET oraz Clean Architecture
 - Napisać w końcu .NET z autoryzacją
+- Nauczyć się więcej na temat Nx
 

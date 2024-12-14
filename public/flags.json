@@ -1,0 +1,10 @@
+[
+  {
+    "label": "greetUser",
+    "value": true
+  },
+  {
+    "label": "aboutSection",
+    "value": false
+  }
+]
