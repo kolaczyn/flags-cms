@@ -33,4 +33,11 @@ Celem projektu jest zbudowanie projektu do zarządzania feature flagami
 - Przypomnieć sobie .NET oraz Clean Architecture
 - Napisać w końcu .NET z autoryzacją
 - Nauczyć się więcej na temat Nx
+- Ładowanie zmiennych środowiskowych natywnie (build-time)
 
+## Jak uruchomić
+
+```sh
+yarn backend # w jednym terminalu
+yarn start # w drugim terminalu
+```

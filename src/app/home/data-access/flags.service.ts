@@ -21,15 +21,17 @@ export class FlagsService {
   constructor() {
     connect(this.state).with(
       this.flagsLoaded$,
-      (state, response): S => ({
+      (_state, response): S => ({
         data: response,
         loading: false,
       }),
     )
   }
 
+  private apiUrl = 'http://localhost:3000'
+
   getFlags() {
-    return this.http.get<FlagsDto>('/flags.json')
+    return this.http.get<FlagsDto>(`${this.apiUrl}/flags`)
   }
 
   private flagsLoaded$ = this.getFlags()
