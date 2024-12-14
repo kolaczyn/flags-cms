@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core'
 import { FlagsService } from './data-access/flags.service'
 import { FlagsListComponent } from './ui/flags-list.component'
-import { FlagDto } from './types/flag-dto'
 
 @Component({
   selector: 'app-home',
@@ -10,8 +9,4 @@ import { FlagDto } from './types/flag-dto'
 })
 export default class FlagsSettingsComponent {
   flagsService = inject(FlagsService)
-
-  onChange([id, newValue]: [FlagDto['id'], FlagDto['value']]) {
-    this.flagsService.changeFlag(id, newValue)
-  }
 }

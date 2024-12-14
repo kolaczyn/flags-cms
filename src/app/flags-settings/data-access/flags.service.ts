@@ -5,6 +5,8 @@ import { LoadableState } from '../../shared/types/loadable-state'
 import { initialState } from '../../shared/utils/initial-state'
 import { connect } from 'ngxtension/connect'
 import { FlagDto } from '../types/flag-dto'
+import { startWith, Subject, switchMap } from 'rxjs'
+import { FlagChanged } from '../types/flag-changed'
 
 type FlagsState = LoadableState<FlagsListDto>
 type S = Partial<FlagsState>
@@ -18,15 +20,31 @@ export class FlagsService {
   private state = signal<FlagsState>(initialState)
 
   flags = computed(() => this.state().data)
+  loading = computed(() => this.state().loading)
+
+  flagChanged$ = new Subject<FlagChanged>()
 
   constructor() {
-    connect(this.state).with(
-      this.flagsLoaded$,
-      (_state, response): S => ({
-        data: response,
-        loading: false,
-      }),
-    )
+    connect(this.state)
+      .with(
+        this.flagsLoaded$,
+        (_state, response): S => ({
+          data: response,
+          loading: false,
+        }),
+      )
+      .with(
+        this.flagChanged$,
+        (state, response): S => ({
+          loading: true,
+        }),
+      )
+      .with(
+        this.changeFlag$,
+        (state, response): S => ({
+          loading: false,
+        }),
+      )
   }
 
   private apiUrl = 'http://localhost:3000/flags'
@@ -45,14 +63,16 @@ export class FlagsService {
     return this.flags()?.find((x) => x.label === label)?.value ?? false
   }
 
-  changeFlag(id: FlagDto['id'], newValue: FlagDto['value']) {
-    // TODO fix this subscribe
-    return this.http
-      .patch(`${this.apiUrl}/${id}`, {
+  changeFlag$ = this.flagChanged$.pipe(
+    switchMap(({ id, newValue }) =>
+      this.http.patch(`${this.apiUrl}/${id}`, {
         value: newValue,
-      } as Partial<FlagDto>)
-      .subscribe()
-  }
+      } as Partial<FlagDto>),
+    ),
+  )
 
-  private flagsLoaded$ = this.getFlags()
+  private flagsLoaded$ = this.flagChanged$.pipe(
+    startWith(null),
+    switchMap(() => this.getFlags()),
+  )
 }

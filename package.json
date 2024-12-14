@@ -7,7 +7,7 @@
     "start:hmr": "NG_HMR_TEMPLATES=1 ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "backend": "json-server db.json",
+    "backend": "json-server db.json --delay 350",
     "test": "ng test"
   },
   "private": true,
@@ -33,7 +33,7 @@
     "@angular/compiler-cli": "^19.0.0",
     "@types/jasmine": "~5.1.0",
     "jasmine-core": "~5.4.0",
-    "json-server": "^1.0.0-beta.3",
+    "json-server": "0.17.3",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",

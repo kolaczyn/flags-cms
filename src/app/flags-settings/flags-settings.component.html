@@ -1,3 +1,9 @@
 @if (flagsService.flags(); as flags) {
-  <app-flags-list [flags]="flags" (change)="onChange($event)" />
+  <app-flags-list
+    [flags]="flags"
+    [loading]="flagsService.loading()"
+    (change)="
+      flagsService.flagChanged$.next({ id: $event.id, newValue: !$event.value })
+    "
+  />
 }
