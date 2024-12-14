@@ -1,7 +1,7 @@
 <ul>
-  @for (flag of flags(); track flag.label) {
+  @for (flag of flags(); track flag.id) {
     <li>
-      <mat-checkbox [disabled]="true" [checked]="flag.value">
+      <mat-checkbox (change)="onChange(flag)" [checked]="flag.value">
         {{ flag.label }}:
       </mat-checkbox>
     </li>

@@ -36,9 +36,10 @@ Celem projektu jest zbudowanie projektu do zarządzania feature flagami
 - Nauczyć się więcej na temat Nx
 - Ładowanie zmiennych środowiskowych natywnie (build-time)
 
-## Być może w przyszłości
+## Być może w przyszłości (ale raczej nie)
 
-Ogarnąć logi (frontend + backend)
+- Ogarnąć logi (frontend + backend)
+- Flagi realtime'owe (bez potrzeby odświeżania strony)
 
 ## Jak uruchomić
 

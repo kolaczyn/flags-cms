@@ -1,12 +1,12 @@
 {
   "flags": [
     {
-      "id": 1,
+      "id": "1",
       "label": "greetUser",
       "value": true
     },
     {
-      "id": 2,
+      "id": "2",
       "label": "aboutSection",
       "value": true
     }
