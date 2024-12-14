@@ -26,15 +26,7 @@ export class FlagsService {
   flags = computed(() => this.state().data)
   loading = computed(() => this.state().loading)
 
-  // flags
-  flagGreetUsers = computed(() => this.checkValue('greetUser'))
-  flagAboutSection = computed(() => this.checkValue('aboutSection'))
-
-  checkValue(label: Flag) {
-    return this.flags()?.find((x) => x.label === label)?.value ?? false
-  }
-
-  // sources
+  // actions
   flagChanged$ = new Subject<ChangeFlagAction>()
 
   constructor() {

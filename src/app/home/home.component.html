@@ -1,7 +1,7 @@
 <h2>hello from home</h2>
-@if (flagsService.flagGreetUsers()) {
+@if (flagsEnabledService.flagGreetUsers()) {
   <h2>Hi dear user :)</h2>
 }
-@if (flagsService.flagAboutSection()) {
+@if (flagsEnabledService.flagAboutSection()) {
   <p>This is a small section about this app</p>
 }

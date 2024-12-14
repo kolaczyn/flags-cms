@@ -8,6 +8,7 @@ Celem projektu jest zbudowanie projektu do zarządzania feature flagami
 - [ ] Globalne włączenie oraz wyłączenie feature flagi
 - [ ] Na początku wykorzystywane tylko w tym samym projekcie
 - [ ] Potem wykorzystywane w innym projekcie
+- [ ] Nested flags
 - [ ] Dobry type checking (nie może być to zwykły string)
 - [ ] Można przełączać pewne flagi tylko dla uprzywilejowanej grupy użytkowników (np. osoby rozwijające projekt, nie użytkownicy)
 - [ ] Można przełączać pewne flagi dla konkretnych użytkowników
