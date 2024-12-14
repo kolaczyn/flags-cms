@@ -1,13 +1,11 @@
 import { computed, inject, Injectable, signal } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
-import { FlagsListDto } from '../types/flags-list-dto'
+import { FlagAddDto, FlagDto, FlagsListDto } from '../types/flag-dto'
 import { LoadableState } from '../../shared/types/loadable-state'
 import { initialState } from '../../shared/utils/initial-state'
 import { connect } from 'ngxtension/connect'
-import { FlagDto } from '../types/flag-dto'
-import { map, merge, startWith, Subject, switchMap } from 'rxjs'
-import { ChangeFlagAction } from '../types/change-flag-action'
-import { Flag } from '../../shared/types/flag'
+import { BehaviorSubject, map, merge, Subject, switchMap, tap } from 'rxjs'
+import { AddFlagAction, ChangeFlagAction } from '../types/actions'
 
 type FlagsState = LoadableState<FlagsListDto>
 type S = Partial<FlagsState>
@@ -25,40 +23,55 @@ export class FlagsService {
   // selectors
   flags = computed(() => this.state().data)
   loading = computed(() => this.state().loading)
+  error = computed(() => this.state().error)
 
   // actions
-  flagChanged$ = new Subject<ChangeFlagAction>()
+  changeFlagAction$ = new Subject<ChangeFlagAction>()
+  addFlagAction$ = new Subject<AddFlagAction>()
+  shouldRefetch$ = new BehaviorSubject<null>(null)
 
   constructor() {
     const nextState$ = merge(
-      this.flagChanged$.pipe(map((): S => ({ loading: true }))),
-      this.changeFlag$.pipe(map((): S => ({ loading: false }))),
+      this.changeFlagAction$.pipe(map((): S => ({ loading: true }))),
+      this.changeFlagActionDone$.pipe(map((): S => ({}))),
+      this.addFlagAction$.pipe(map((): S => ({ loading: true }))),
+      this.addFlagActionDone$.pipe(map((): S => ({}))),
+      this.shouldRefetch$.pipe(map((): S => ({ loading: true }))),
     )
+
     connect(this.state)
       .with(nextState$)
       .with(
         this.flagsLoaded$,
-        (_s, response): S => ({
-          data: response,
+        (_, data): S => ({
+          data,
           loading: false,
         }),
       )
   }
 
-  changeFlag$ = this.flagChanged$.pipe(switchMap((x) => this.changeFlag(x)))
-
-  private flagsLoaded$ = this.flagChanged$.pipe(
-    startWith(null),
-    switchMap(() => this.getFlags()),
+  changeFlagActionDone$ = this.changeFlagAction$.pipe(
+    switchMap(({ id, newValue }) =>
+      this.http
+        .patch(`${this.apiUrl}/${id}`, {
+          value: newValue,
+        } as Partial<FlagDto>)
+        .pipe(tap(() => this.shouldRefetch$.next(null))),
+    ),
   )
 
-  private getFlags() {
-    return this.http.get<FlagsListDto>(this.apiUrl)
-  }
+  addFlagActionDone$ = this.addFlagAction$.pipe(
+    switchMap((x) =>
+      this.http
+        .post(this.apiUrl, {
+          label: x.label,
+          value: false,
+        } as FlagAddDto)
+        .pipe(tap(() => this.shouldRefetch$.next(null))),
+    ),
+  )
 
-  private changeFlag({ id, newValue }: ChangeFlagAction) {
-    return this.http.patch(`${this.apiUrl}/${id}`, {
-      value: newValue,
-    } as Partial<FlagDto>)
-  }
+  private flagsLoaded$ = this.shouldRefetch$.pipe(
+    switchMap(() => this.http.get<FlagsListDto>(this.apiUrl)),
+  )
 }

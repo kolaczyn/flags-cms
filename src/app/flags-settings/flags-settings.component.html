@@ -1,9 +1,13 @@
+<app-create-flags-form (submitForm)="submitForm($event)" />
 @if (flagsService.flags(); as flags) {
   <app-flags-list
     [flags]="flags"
     [loading]="flagsService.loading()"
     (change)="
-      flagsService.flagChanged$.next({ id: $event.id, newValue: !$event.value })
+      flagsService.changeFlagAction$.next({
+        id: $event.id,
+        newValue: !$event.value,
+      })
     "
   />
 }
