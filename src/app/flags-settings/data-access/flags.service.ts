@@ -5,7 +5,7 @@ import { LoadableState } from '../../shared/types/loadable-state'
 import { initialState } from '../../shared/utils/initial-state'
 import { connect } from 'ngxtension/connect'
 import { FlagDto } from '../types/flag-dto'
-import { startWith, Subject, switchMap } from 'rxjs'
+import { map, merge, startWith, Subject, switchMap } from 'rxjs'
 import { FlagChanged } from '../types/flag-changed'
 
 type FlagsState = LoadableState<FlagsListDto>
@@ -25,23 +25,16 @@ export class FlagsService {
   flagChanged$ = new Subject<FlagChanged>()
 
   constructor() {
+    const nextState$ = merge(
+      this.flagChanged$.pipe(map((): S => ({ loading: true }))),
+      this.changeFlag$.pipe(map((): S => ({ loading: false }))),
+    )
     connect(this.state)
+      .with(nextState$)
       .with(
         this.flagsLoaded$,
-        (_state, response): S => ({
+        (_s, response): S => ({
           data: response,
-          loading: false,
-        }),
-      )
-      .with(
-        this.flagChanged$,
-        (state, response): S => ({
-          loading: true,
-        }),
-      )
-      .with(
-        this.changeFlag$,
-        (state, response): S => ({
           loading: false,
         }),
       )
