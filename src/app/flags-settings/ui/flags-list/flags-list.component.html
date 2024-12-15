@@ -1,11 +1,7 @@
-<ul>
-  @for (flag of flags(); track flag.id) {
-    <li>
-      <app-flag-edit
-        [flag]="flag"
-        (change)="change.emit(flag)"
-        [loading]="loading()"
-      />
-    </li>
-  }
-</ul>
+@for (flag of flags(); track flag.id) {
+  <app-flag-edit
+    [flag]="flag"
+    (change)="change.emit(flag)"
+    [loading]="loading()"
+  />
+}

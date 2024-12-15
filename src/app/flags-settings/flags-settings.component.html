@@ -1,4 +1,7 @@
-<app-create-flags-form (submitForm)="submitForm($event)" />
+<app-create-flags-form
+  (submitForm)="submitForm($event)"
+  [loading]="flagsService.loading()"
+/>
 @if (flagsService.flags(); as flags) {
   <app-flags-list
     [flags]="flags"

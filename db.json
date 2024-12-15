@@ -7,7 +7,7 @@
     },
     {
       "label": "aboutSection",
-      "value": true,
+      "value": false,
       "id": 2
     }
   ]

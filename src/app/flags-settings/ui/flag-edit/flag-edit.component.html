@@ -1,7 +1,15 @@
-<mat-checkbox
-  (change)="change.emit(flag())"
-  [disabled]="loading()"
-  [checked]="flag().value"
->
-  {{ flag().label }}:
-</mat-checkbox>
+<mat-accordion>
+  <mat-expansion-panel hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>{{ flag().label }} </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <mat-slide-toggle
+      (change)="change.emit(flag())"
+      [disabled]="loading()"
+      [checked]="flag().value"
+      labelPosition="before"
+      >Global value:</mat-slide-toggle
+    >
+  </mat-expansion-panel>
+</mat-accordion>

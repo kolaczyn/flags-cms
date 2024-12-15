@@ -1,4 +1,14 @@
 <form [formGroup]="form">
-  <input formControlName="label" />
-  <button type="submit" (click)="validateSubmit()">Submit</button>
+  <mat-form-field>
+    <mat-label>Flag name</mat-label>
+    <input matInput formControlName="label" />
+  </mat-form-field>
+  <button
+    mat-raised-button
+    type="submit"
+    (click)="validateSubmit()"
+    [disabled]="loading()"
+  >
+    Submit
+  </button>
 </form>
