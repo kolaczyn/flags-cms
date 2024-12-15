@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core'
-import { FlagsEnabledService } from '../shared/data-access/flags-enabled.service'
+import { FlagsEnabledService } from '../flags-settings/data-access/flags-enabled.service'
 
 @Component({
   selector: 'app-home',

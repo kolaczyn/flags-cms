@@ -1,6 +1,6 @@
 import { computed, inject, Injectable } from '@angular/core'
-import { FlagsService } from '../../flags-settings/data-access/flags.service'
-import { Flag } from '../types/flag'
+import { FlagsService } from './flags.service'
+import { Flag } from '../../shared/types/flag'
 
 /** This is for consumers, readonly */
 @Injectable({

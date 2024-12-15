@@ -2,15 +2,16 @@
   (submitForm)="submitForm($event)"
   [loading]="flagsService.loading()"
 />
-@if (flagsService.flags(); as flags) {
-  <app-flags-list
-    [flags]="flags"
-    [loading]="flagsService.loading()"
+@for (flag of flagsService.flags(); track flag.id) {
+  <app-flag-edit
+    [flag]="flag"
     (change)="
       flagsService.changeFlagAction$.next({
         id: $event.id,
         newValue: !$event.value,
       })
     "
+    (changeGroup)="flagsService.changeGroupValueAction$.next($event)"
+    [loading]="flagsService.loading()"
   />
 }

@@ -2,12 +2,24 @@
   "flags": [
     {
       "label": "greetUser",
-      "value": false,
+      "value": true,
+      "groups": [
+        {
+          "id": "super",
+          "value": false
+        }
+      ],
       "id": 1
     },
     {
       "label": "aboutSection",
       "value": false,
+      "groups": [
+        {
+          "id": "super",
+          "value": true
+        }
+      ],
       "id": 2
     }
   ]

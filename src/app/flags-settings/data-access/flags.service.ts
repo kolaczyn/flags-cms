@@ -14,7 +14,12 @@ import {
   switchMap,
   tap,
 } from 'rxjs'
-import { AddFlagAction, ChangeFlagAction } from '../types/actions'
+import {
+  AddFlagAction,
+  ChangeFlagAction,
+  ChangeGroupValueAction,
+} from '../types/actions'
+import { FlagsApiService } from './flags-api.service'
 
 type FlagsState = LoadableState<FlagsListDto>
 type S = Partial<FlagsState>
@@ -24,7 +29,7 @@ type S = Partial<FlagsState>
 })
 export class FlagsService {
   private http = inject(HttpClient)
-  private apiUrl = 'http://localhost:3000/flags'
+  private flagsApi = inject(FlagsApiService)
 
   // state
   private state = signal<FlagsState>(initialState)
@@ -37,6 +42,7 @@ export class FlagsService {
   // actions
   changeFlagAction$ = new Subject<ChangeFlagAction>()
   addFlagAction$ = new Subject<AddFlagAction>()
+  changeGroupValueAction$ = new Subject<ChangeGroupValueAction>()
   shouldRefetch$ = new BehaviorSubject<null>(null)
 
   private error$ = new Subject<string | null>()
@@ -45,9 +51,14 @@ export class FlagsService {
     const nextState$ = merge(
       this.changeFlagAction$.pipe(map((): S => ({ loading: true }))),
       this.changeFlagActionDone$.pipe(map((): S => ({}))),
+
       this.addFlagAction$.pipe(map((): S => ({ loading: true }))),
       this.addFlagActionDone$.pipe(map((): S => ({}))),
+
       this.shouldRefetch$.pipe(map((): S => ({ loading: true }))),
+
+      this.changeGroupValueAction$.pipe(map((): S => ({ loading: true }))),
+      this.changeGroupValueActionDone$.pipe(map((): S => ({ loading: false }))),
     )
 
     connect(this.state)
@@ -62,40 +73,40 @@ export class FlagsService {
       .with(this.error$, (_, error): S => ({ error }))
   }
 
-  changeFlagActionDone$ = this.changeFlagAction$.pipe(
-    switchMap(({ id, newValue }) =>
-      this.http
-        .patch(`${this.apiUrl}/${id}`, {
-          value: newValue,
-        } as Partial<FlagDto>)
-        .pipe(
-          tap(() => this.shouldRefetch$.next(null)),
-          catchError((err) => this.handleError(err)),
-        ),
+  private changeFlagActionDone$ = this.changeFlagAction$.pipe(
+    switchMap((payload) =>
+      this.flagsApi.patchFlagValue(payload).pipe(
+        tap(() => this.shouldRefetch$.next(null)),
+        catchError((err) => this.handleError(err)),
+      ),
     ),
   )
 
-  addFlagActionDone$ = this.addFlagAction$.pipe(
-    switchMap((x) =>
-      this.http
-        .post(this.apiUrl, {
-          label: x.label,
-          value: false,
-        } as FlagAddDto)
-        .pipe(
-          tap(() => this.shouldRefetch$.next(null)),
-          catchError((err) => this.handleError(err)),
-        ),
+  private addFlagActionDone$ = this.addFlagAction$.pipe(
+    switchMap((payload) =>
+      this.flagsApi.postFlag(payload).pipe(
+        tap(() => this.shouldRefetch$.next(null)),
+        catchError((err) => this.handleError(err)),
+      ),
+    ),
+  )
+
+  private changeGroupValueActionDone$ = this.changeGroupValueAction$.pipe(
+    switchMap((payload) =>
+      this.flagsApi.patchFlagGroup(payload).pipe(
+        // TODO this repeats a couple of times
+        tap(() => this.shouldRefetch$.next(null)),
+        catchError((err) => this.handleError(err)),
+      ),
     ),
   )
 
   private flagsLoaded$ = this.shouldRefetch$.pipe(
-    switchMap(() => this.http.get<FlagsListDto>(this.apiUrl)),
+    switchMap(() => this.flagsApi.getFlags()),
     catchError((err) => this.handleError(err)),
   )
 
   private handleError(err: HttpErrorResponse) {
-    console.log(err)
     this.error$.next(err.message)
     return EMPTY
   }
