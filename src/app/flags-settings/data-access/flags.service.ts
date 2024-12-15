@@ -1,10 +1,19 @@
 import { computed, inject, Injectable, signal } from '@angular/core'
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpErrorResponse } from '@angular/common/http'
 import { FlagAddDto, FlagDto, FlagsListDto } from '../types/flag-dto'
 import { LoadableState } from '../../shared/types/loadable-state'
 import { initialState } from '../../shared/utils/initial-state'
 import { connect } from 'ngxtension/connect'
-import { BehaviorSubject, map, merge, Subject, switchMap, tap } from 'rxjs'
+import {
+  BehaviorSubject,
+  catchError,
+  EMPTY,
+  map,
+  merge,
+  Subject,
+  switchMap,
+  tap,
+} from 'rxjs'
 import { AddFlagAction, ChangeFlagAction } from '../types/actions'
 
 type FlagsState = LoadableState<FlagsListDto>
@@ -30,6 +39,8 @@ export class FlagsService {
   addFlagAction$ = new Subject<AddFlagAction>()
   shouldRefetch$ = new BehaviorSubject<null>(null)
 
+  private error$ = new Subject<string | null>()
+
   constructor() {
     const nextState$ = merge(
       this.changeFlagAction$.pipe(map((): S => ({ loading: true }))),
@@ -48,6 +59,7 @@ export class FlagsService {
           loading: false,
         }),
       )
+      .with(this.error$, (_, error): S => ({ error }))
   }
 
   changeFlagActionDone$ = this.changeFlagAction$.pipe(
@@ -56,7 +68,10 @@ export class FlagsService {
         .patch(`${this.apiUrl}/${id}`, {
           value: newValue,
         } as Partial<FlagDto>)
-        .pipe(tap(() => this.shouldRefetch$.next(null))),
+        .pipe(
+          tap(() => this.shouldRefetch$.next(null)),
+          catchError((err) => this.handleError(err)),
+        ),
     ),
   )
 
@@ -67,11 +82,21 @@ export class FlagsService {
           label: x.label,
           value: false,
         } as FlagAddDto)
-        .pipe(tap(() => this.shouldRefetch$.next(null))),
+        .pipe(
+          tap(() => this.shouldRefetch$.next(null)),
+          catchError((err) => this.handleError(err)),
+        ),
     ),
   )
 
   private flagsLoaded$ = this.shouldRefetch$.pipe(
     switchMap(() => this.http.get<FlagsListDto>(this.apiUrl)),
+    catchError((err) => this.handleError(err)),
   )
+
+  private handleError(err: HttpErrorResponse) {
+    console.log(err)
+    this.error$.next(err.message)
+    return EMPTY
+  }
 }
