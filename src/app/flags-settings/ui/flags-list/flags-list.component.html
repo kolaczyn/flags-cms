@@ -1,13 +1,11 @@
 <ul>
   @for (flag of flags(); track flag.id) {
     <li>
-      <mat-checkbox
+      <app-flag-edit
+        [flag]="flag"
         (change)="change.emit(flag)"
-        [disabled]="loading()"
-        [checked]="flag.value"
-      >
-        {{ flag.label }}:
-      </mat-checkbox>
+        [loading]="loading()"
+      />
     </li>
   }
 </ul>

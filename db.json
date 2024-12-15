@@ -1,34 +1,14 @@
 {
   "flags": [
     {
-      "label": "isFooterEnabled",
-      "value": true,
+      "label": "greetUser",
+      "value": false,
       "id": 1
     },
     {
-      "label": "isEnabled",
+      "label": "aboutSection",
       "value": true,
       "id": 2
-    },
-    {
-      "label": "hello",
-      "value": false,
-      "id": 3
-    },
-    {
-      "label": "jkl",
-      "value": true,
-      "id": 4
-    },
-    {
-      "label": "krem",
-      "value": false,
-      "id": 5
-    },
-    {
-      "label": "wino",
-      "value": false,
-      "id": 6
     }
   ]
 }

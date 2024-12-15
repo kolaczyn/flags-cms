@@ -1,0 +1,7 @@
+<mat-checkbox
+  (change)="change.emit(flag())"
+  [disabled]="loading()"
+  [checked]="flag().value"
+>
+  {{ flag().label }}:
+</mat-checkbox>
