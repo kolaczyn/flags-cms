@@ -17,7 +17,7 @@ import {
   providedIn: 'root',
 })
 export class FlagsApiService {
-  private apiUrl = 'http://localhost:3000/flags'
+  private apiUrl = 'http://localhost:5285/flags'
   private http = inject(HttpClient)
 
   getFlags() {
@@ -27,7 +27,6 @@ export class FlagsApiService {
   postFlag({ label }: AddFlagAction) {
     const payload: FlagAddDto = {
       label: label,
-      value: false,
     }
     return this.http.post(this.apiUrl, payload)
   }

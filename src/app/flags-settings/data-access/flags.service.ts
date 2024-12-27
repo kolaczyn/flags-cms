@@ -28,7 +28,6 @@ type S = Partial<FlagsState>
   providedIn: 'root',
 })
 export class FlagsService {
-  private http = inject(HttpClient)
   private flagsApi = inject(FlagsApiService)
 
   // state

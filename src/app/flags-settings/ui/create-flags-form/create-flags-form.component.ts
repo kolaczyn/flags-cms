@@ -22,7 +22,6 @@ export class CreateFlagsFormComponent {
 
   validateSubmit() {
     const { label } = this.form.getRawValue()
-    console.log(this.form.getRawValue())
     this.submitForm.emit({
       label: label,
     })
